@@ -10,7 +10,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Microsoft.Azure.Cosmos.Table;
 
-namespace MinGyu.Function
+namespace seungbeom.Function
 {
     public static class ReadTable
     {
