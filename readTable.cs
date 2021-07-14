@@ -10,16 +10,15 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Microsoft.Azure.Cosmos.Table;
 
-namespace seungbeom.Function
+namespace MinGyu.Function
 {
     public static class ReadTable
     {
-        [FunctionName("ReadTable")]  //void -> Task<string> 로 수정
-       public static Task<string> Run([HttpTrigger(AuthorizationLevel.Function, "get", "post",
-                                                                                     Route = null)]
+        [FunctionName("ReadTable")]
+        public static Task<string> Run([HttpTrigger(AuthorizationLevel.Function, "get", "post", Route = null)]
         HttpRequest req, ILogger log, ExecutionContext context)
         {
-          string connStrA = Environment.GetEnvironmentVariable("AzureWebJobsStorage");
+            string connStrA = Environment.GetEnvironmentVariable("AzureWebJobsStorage");
             string requestBody = new StreamReader(req.Body).ReadToEnd();
             dynamic data = JsonConvert.DeserializeObject(requestBody);
             string PartitionKeyA = data.PartitionKey;
@@ -35,13 +34,14 @@ namespace seungbeom.Function
             Task<string> response = ReadToTable(tableA, filterA, filterB);
             return response;
         }
-static async Task<string> ReadToTable(CloudTable tableA, string filterA, string filterB)
+
+        static async Task<string> ReadToTable(CloudTable tableA, string filterA, string filterB)
         {
             TableQuery<MemoData> rangeQ = new TableQuery<MemoData>().Where(
                 TableQuery.CombineFilters(filterA, TableOperators.And, filterB)
             );
             TableContinuationToken tokenA = null;
-            rangeQ.TakeCount = 10000;
+            rangeQ.TakeCount = 1000;
             JArray resultArr = new JArray();
             try
             {
@@ -52,13 +52,12 @@ static async Task<string> ReadToTable(CloudTable tableA, string filterA, string 
                     foreach (MemoData entity in segment)
                     {
                         JObject srcObj = JObject.FromObject(entity);
-                       // srcObj.Remove("Timestamp");
+                        //srcObj.Remove("Timestamp");
                         resultArr.Add(srcObj);
-                    }  
+                    }
                 } while (tokenA != null);
             }
-
-          catch (StorageException e)
+            catch (StorageException e)
             {
                 Console.WriteLine(e.Message);
                 throw;
@@ -69,12 +68,9 @@ static async Task<string> ReadToTable(CloudTable tableA, string filterA, string 
             else return "No Data";
         }
 
-
-
-      private class MemoData : TableEntity
+        private class MemoData : TableEntity
         {
             public string content { get; set; }
         }
-
     }
 }
