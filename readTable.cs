@@ -54,7 +54,7 @@ static async Task<string> ReadToTable(CloudTable tableA, string filterA, string 
                         JObject srcObj = JObject.FromObject(entity);
                        // srcObj.Remove("Timestamp");
                         resultArr.Add(srcObj);
-                    }
+                    }  
                 } while (tokenA != null);
             }
 
