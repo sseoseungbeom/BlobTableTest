@@ -24,7 +24,7 @@ namespace seungbeom.Function
             string valueA = data.a;
 
             BlobServiceClient clientA = new BlobServiceClient(connStrA);
-            BlobContainerClient containerA = clientA.GetBlobContainerClient("mingyucon");
+            BlobContainerClient containerA = clientA.GetBlobContainerClient("sbcon");
             BlobClient blobA = containerA.GetBlobClient(valueA + ".json");
 
             string responseA = "No Data";
