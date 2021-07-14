@@ -35,7 +35,7 @@ namespace seungbeom.Function
                {
                    using (MemoryStream msA = new MemoryStream())
                    {
-                       blobA.DownloadTo(msA);
+                       blobA.DownloadTo(msA); 
                         responseA = System.Text.Encoding.UTF8.GetString(msA.ToArray());
                    }
                }
